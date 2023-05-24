@@ -1,6 +1,5 @@
 package model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -9,7 +8,7 @@ import java.time.LocalDate;
  * @since : 0.1.0
  **/
 
-public class OrderDTO  {
+public class OrderDTO {
     private String orderId;
     private LocalDate orderDate;
     private String customerId;
@@ -17,6 +16,12 @@ public class OrderDTO  {
     private BigDecimal orderTotal;
 
     public OrderDTO() {
+    }
+
+    public OrderDTO(String orderId, LocalDate orderDate, String customerId) {
+        this.orderId = orderId;
+        this.orderDate = orderDate;
+        this.customerId = customerId;
     }
 
     public OrderDTO(String orderId, LocalDate orderDate, String customerId, String customerName, BigDecimal orderTotal) {

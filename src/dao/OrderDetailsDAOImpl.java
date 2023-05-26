@@ -6,10 +6,16 @@ import model.OrderDetailDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class OrderDetailsDAOImpl implements OrderDetailDAO{
 
-    public boolean saveOrderDetails(OrderDetailDTO dto) throws SQLException, ClassNotFoundException {
+    @Override
+    public ArrayList<OrderDetailDTO> getAll() throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    public boolean add(OrderDetailDTO dto) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement stm = connection.prepareStatement("INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)");
         stm.setString(1, dto.getOid());
@@ -17,5 +23,30 @@ public class OrderDetailsDAOImpl implements OrderDetailDAO{
         stm.setBigDecimal(3, dto.getUnitPrice());
         stm.setInt(4, dto.getQty());
         return stm.executeUpdate()>0;
+    }
+
+    @Override
+    public boolean update(OrderDetailDTO dto) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public boolean exist(String id) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public String generateNewID() throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    @Override
+    public boolean delete(String id) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public OrderDetailDTO search(String id) throws SQLException, ClassNotFoundException {
+        return null;
     }
 }

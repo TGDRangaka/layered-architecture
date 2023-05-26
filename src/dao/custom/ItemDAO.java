@@ -1,5 +1,6 @@
-package dao;
+package dao.custom;
 
+import dao.CrudDAO;
 import db.DBConnection;
 import model.ItemDTO;
 

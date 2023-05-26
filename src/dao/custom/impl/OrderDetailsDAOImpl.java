@@ -1,5 +1,7 @@
-package dao;
+package dao.custom.impl;
 
+import dao.SQLUtil;
+import dao.custom.OrderDetailDAO;
 import db.DBConnection;
 import model.OrderDetailDTO;
 
@@ -8,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class OrderDetailsDAOImpl implements OrderDetailDAO{
+public class OrderDetailsDAOImpl implements OrderDetailDAO {
 
     @Override
     public ArrayList<OrderDetailDTO> getAll() throws SQLException, ClassNotFoundException {
@@ -16,13 +18,8 @@ public class OrderDetailsDAOImpl implements OrderDetailDAO{
     }
 
     public boolean add(OrderDetailDTO dto) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        PreparedStatement stm = connection.prepareStatement("INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)");
-        stm.setString(1, dto.getOid());
-        stm.setString(2, dto.getItemCode());
-        stm.setBigDecimal(3, dto.getUnitPrice());
-        stm.setInt(4, dto.getQty());
-        return stm.executeUpdate()>0;
+        String query = "INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)";
+        return SQLUtil.executeQuery(query, dto.getOid(), dto.getItemCode(), dto.getUnitPrice(), dto.getQty());
     }
 
     @Override

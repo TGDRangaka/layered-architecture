@@ -1,9 +1,8 @@
 package bo.custom.impl;
 
-import bo.CustomerBO;
+import bo.custom.CustomerBO;
 import dao.DAOFactory;
 import dao.custom.CustomerDAO;
-import dao.custom.impl.CustomerDAOImpl;
 import model.CustomerDTO;
 
 import java.sql.SQLException;

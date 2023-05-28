@@ -1,7 +1,7 @@
 package controller;
 
-import bo.PlaceOrderBO;
-import bo.custom.impl.PlaceOrderBOImpl;
+import bo.BOFactory;
+import bo.custom.PlaceOrderBO;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
@@ -55,7 +55,7 @@ public class PlaceOrderFormController {
     public Label lblTotal;
     private String orderId;
 
-    private PlaceOrderBO placeOrderBO = new PlaceOrderBOImpl();
+    private PlaceOrderBO placeOrderBO = (PlaceOrderBO) BOFactory.getInstance().getBO(BOFactory.BOTypes.PLACE_ORDER);
 
 
     public void initialize() throws SQLException, ClassNotFoundException {

@@ -1,11 +1,12 @@
-package bo;
+package bo.custom;
 
+import bo.SuperBO;
 import model.CustomerDTO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface CustomerBO {
+public interface CustomerBO extends SuperBO {
     public ArrayList<CustomerDTO> getAllCustomer() throws SQLException, ClassNotFoundException;
 
     public boolean addCustomer(CustomerDTO dto) throws SQLException, ClassNotFoundException;

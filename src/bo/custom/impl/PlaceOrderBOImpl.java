@@ -7,6 +7,10 @@ import dao.custom.ItemDAO;
 import dao.custom.OrderDAO;
 import dao.custom.OrderDetailDAO;
 import db.DBConnection;
+import entity.Customer;
+import entity.Item;
+import entity.Order;
+import entity.OrderDetails;
 import model.CustomerDTO;
 import model.ItemDTO;
 import model.OrderDTO;
@@ -17,6 +21,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlaceOrderBOImpl implements PlaceOrderBO {
     private CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getInstance().getDAO(DAOFactory.DAOTypes.CUSTOMER);
@@ -26,12 +31,14 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
 
     @Override
     public CustomerDTO searchCustomer(String id) throws SQLException, ClassNotFoundException {
-        return customerDAO.search(id);
+        Customer c = customerDAO.search(id);
+        return new CustomerDTO(c.getId(),c.getName(),c.getAddress());
     }
 
     @Override
     public ItemDTO searchItem(String id) throws SQLException, ClassNotFoundException {
-        return itemDAO.search(id);
+        Item i = itemDAO.search(id);
+        return new ItemDTO(i.getCode(),i.getDescription(),i.getUnitPrice(),i.getQtyOnHand());
     }
 
     @Override
@@ -51,12 +58,26 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
 
     @Override
     public ArrayList<CustomerDTO> getAllCustomer() throws SQLException, ClassNotFoundException {
-        return customerDAO.getAll();
+        ArrayList<Customer> all = customerDAO.getAll();
+        ArrayList<CustomerDTO> allCustomers = new ArrayList<>();
+
+        for (Customer customer : all){
+            allCustomers.add(new CustomerDTO(customer.getId(),customer.getName(), customer.getAddress()));
+        }
+
+        return allCustomers;
     }
 
     @Override
     public ArrayList<ItemDTO> getAllItem() throws SQLException, ClassNotFoundException {
-        return itemDAO.getAll();
+        ArrayList<Item> all = itemDAO.getAll();
+        ArrayList<ItemDTO> allItems = new ArrayList<>();
+
+        for (Item item : all){
+            allItems.add(new ItemDTO(item.getCode(),item.getDescription(),item.getUnitPrice(),item.getQtyOnHand()));
+        }
+
+        return allItems;
     }
 
     @Override
@@ -76,7 +97,7 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
             connection.setAutoCommit(false);
 
             //Save the Order to the order table
-            boolean b2 = orderDAO.add(new OrderDTO(orderId, orderDate, customerId));
+            boolean b2 = orderDAO.add(new Order(orderId, orderDate, customerId));
 
             if (!b2) {
                 connection.rollback();
@@ -87,7 +108,7 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
 
             // add data to the Order Details table
             for (OrderDetailDTO detail : orderDetails) {
-                boolean b3 = orderDetailDAO.add(detail);
+                boolean b3 = orderDetailDAO.add(new OrderDetails(orderId,detail.getItemCode(),detail.getQty(),detail.getUnitPrice()));
                 if (!b3) {
                     connection.rollback();
                     connection.setAutoCommit(true);
@@ -99,7 +120,7 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
                 item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
 
                 //update item
-                boolean b = itemDAO.update(new ItemDTO(item.getCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand()));
+                boolean b = itemDAO.update(new Item(item.getCode(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand()));
 
                 if (!b) {
                     connection.rollback();
@@ -123,7 +144,8 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
 
     public ItemDTO findItem(String code) {
         try {
-            return itemDAO.search(code);
+            Item i = itemDAO.search(code);
+            return new ItemDTO(i.getCode(),i.getDescription(),i.getUnitPrice(),i.getQtyOnHand());
         } catch (SQLException e) {
             throw new RuntimeException("Failed to find the Item " + code, e);
         } catch (ClassNotFoundException e) {

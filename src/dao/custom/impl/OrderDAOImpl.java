@@ -2,7 +2,8 @@ package dao.custom.impl;
 
 import dao.SQLUtil;
 import dao.custom.OrderDAO;
-import db.DBConnection;
+import entity.Customer;
+import entity.Order;
 import model.OrderDTO;
 
 import java.sql.*;
@@ -21,7 +22,7 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public OrderDTO search(String id) throws SQLException, ClassNotFoundException {
+    public Order search(String id) throws SQLException, ClassNotFoundException {
         return null;
     }
 
@@ -31,17 +32,17 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public ArrayList<OrderDTO> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<Order> getAll() throws SQLException, ClassNotFoundException {
         return null;
     }
 
-    public boolean add(OrderDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean add(Order dto) throws SQLException, ClassNotFoundException {
         String query = "INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)";
         return SQLUtil.executeQuery(query, dto.getOrderId(), Date.valueOf(dto.getOrderDate()), dto.getCustomerId());
     }
 
     @Override
-    public boolean update(OrderDTO dto) throws SQLException, ClassNotFoundException {
+    public boolean update(Order dto) throws SQLException, ClassNotFoundException {
         return false;
     }
 
